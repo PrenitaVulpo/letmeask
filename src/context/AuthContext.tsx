@@ -1,11 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { auth, firebase } from "../services/firebase";
-
-type User = {
-	id: string;
-	name: string;
-	avatar: string;
-};
+import User from "../TS/Types/User";
 
 type AuthContextType = {
 	user: User | undefined;
