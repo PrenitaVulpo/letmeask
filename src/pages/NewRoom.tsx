@@ -1,11 +1,11 @@
 import React, { FormEvent, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import illustrationImg from "../assets/images/illustration.svg";
 import logoImg from "../assets/images/logo.svg";
 
-import Button from "../components/Button";
+import ButtonLetmeask from "../components/ButtonLetmeask";
 import { database } from "../services/firebase";
 import useAuth from "../hooks/useAuth";
 
@@ -15,13 +15,13 @@ function NewRoom() {
 	const [newRoomName, setNewRoomName] = useState("");
 	const { user } = useAuth();
 
-	async function handleCreateRoom(
-		event: FormEvent,
-	): Promise<void | undefined | null> {
+	const history = useHistory();
+
+	async function handleCreateRoom(event: FormEvent) {
 		event.preventDefault();
 
 		if (newRoomName.trim() === "") {
-			return null;
+			return;
 		}
 
 		const roomRef = database.ref("rooms");
@@ -30,6 +30,8 @@ function NewRoom() {
 			title: newRoomName,
 			authorID: user?.id,
 		});
+
+		history.push(`/rooms/${firebaseRoom.key}`);
 	}
 
 	return (
@@ -53,7 +55,7 @@ function NewRoom() {
 							value={newRoomName}
 							onChange={(event) => setNewRoomName(event.target.value)}
 						/>
-						<Button type="submit">Criar sala</Button>
+						<ButtonLetmeask type="submit">Criar sala</ButtonLetmeask>
 					</form>
 					<p>
 						Quer entrar em uma sala existente? <Link to="/">clique aqui</Link>
